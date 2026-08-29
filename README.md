@@ -10,7 +10,9 @@ The [ret2shell](https://github.com/ret2shell/ret2shell) CTF platform exposes dyn
 wss://ctf.example.com/api/traffic/<token>?port=9999
 ```
 
-Unlike platforms that hand out plain `host:port` pairs, you cannot `nc` or `pwntools` into these directly. **wsrx** bridges a WebSocket endpoint to a local TCP port; **wsrx-mcp** lets your MCP client (Claude Desktop, ZCode, or any other MCP host) start, inspect, and tear down those bridges as tools — no manual terminal work.
+Platforms that hand out plain `host:port` pairs can be reached with nc / pwntools directly; these links cannot.
+
+**wsrx** bridges a WebSocket endpoint to a local TCP port; **wsrx-mcp** then wraps starting, inspecting, and closing tunnels as MCP tools, so your MCP client (Claude Desktop, Codex, etc.) can call them directly — no manual terminal work.
 
 ```
 ┌───────────────┐   TCP    ┌──────────────┐   WSS    ┌───────────────────┐
@@ -23,16 +25,16 @@ Unlike platforms that hand out plain `host:port` pairs, you cannot `nc` or `pwnt
 
 | Tool | Description |
 |---|---|
-| `wsrx_connect(remote, local_port?, wait?)` | Forward a local TCP port to a `ws://`/`wss://` URL. Idempotent per remote; auto-picks a free port; waits until the port accepts TCP. |
+| `wsrx_connect(remote, local_port?, wait?)` | Forward a local TCP port to a `ws://`/`wss://` URL. For the same remote, an existing tunnel is reused; a free port is picked automatically when not specified; by default the call returns only once the local port is actually connectable. |
 | `wsrx_list()` | List tunnels: remote, local port, endpoint, PID, alive. |
-| `wsrx_disconnect(local_port? \| remote?)` | Close one tunnel by port or remote URL. |
+| `wsrx_disconnect(local_port? \| remote?)` | Close a tunnel by its local port or remote URL. |
 | `wsrx_stop_all()` | Close every tunnel. |
 | `wsrx_doctor()` | Check the wsrx binary is on PATH and list current tunnels. |
 
 ## Requirements
 
-- Python ≥ 3.10
-- The `wsrx` CLI on PATH ([releases](https://github.com/XDSEC/WebSocketReflectorX/releases)), or set `WSRX_BINARY` to its location.
+- Python 3.10+
+- The `wsrx` CLI ([releases](https://github.com/XDSEC/WebSocketReflectorX/releases)) installed and on PATH, or set `WSRX_BINARY` to its location.
 
 ## Install & configure
 
@@ -69,15 +71,15 @@ pipx install git+https://github.com/springbot2025/wsrx-mcp
 |---|---|---|
 | `WSRX_BINARY` | `wsrx` | Path/resolved name of the wsrx executable. |
 | `WSRX_MCP_BIND_HOST` | `127.0.0.1` | Address tunnels bind to. Use `0.0.0.0` only if other hosts must reach the tunnels. |
-| `WSRX_MCP_STARTUP_TIMEOUT` | `15` | Seconds to wait for a tunnel port to become reachable. |
+| `WSRX_MCP_STARTUP_TIMEOUT` | `15` | How long to wait for the local port to become connectable, in seconds. |
 
 ## Example session
 
 Ask your agent:
 
-> Connect to wss://ctf.example.com/api/traffic/abc123?port=9999 and tell me the local endpoint.
+> Connect to wss://ctf.example.com/api/traffic/abc123?port=9999 (the wsrx link from the ret2shell platform) and tell me the local endpoint.
 
-The agent calls `wsrx_connect`, gets back `{"endpoint": "127.0.0.1:54321", ...}`, and can then run `nc 127.0.0.1 54321` or point pwntools at it. Tunnels are reused across calls and shut down when the server exits.
+The agent calls `wsrx_connect`, gets back `{"endpoint": "127.0.0.1:54321", ...}`, and can then run `nc 127.0.0.1 54321` or use pwntools to connect. The same tunnel is reused across calls, and all tunnels close when the service exits.
 
 ## Security notes
 
