@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-一个用于管理 [WebSocket Reflector X（wsrx）](https://github.com/XDSEC/websocket-reflector-x)隧道的 [MCP（Model Context Protocol）](https://modelcontextprotocol.io)服务器。
+一个用于管理 [WebSocket Reflector X（wsrx）](https://github.com/XDSEC/WebSocketReflectorX)隧道的 [MCP（Model Context Protocol）](https://modelcontextprotocol.io)服务器。
 
 [ret2shell](https://github.com/ret2shell/ret2shell) CTF 平台的动态靶机只通过 WebSocket 流量链接暴露，形如：
 
@@ -32,7 +32,7 @@ wss://ctf.example.com/api/traffic/<token>?port=9999
 ## 环境要求
 
 - Python ≥ 3.10
-- PATH 上有 `wsrx` 命令行工具（[releases 下载](https://github.com/XDSEC/websocket-reflector-x/releases)），或通过 `WSRX_BINARY` 指定其位置。
+- PATH 上有 `wsrx` 命令行工具（[releases 下载](https://github.com/XDSEC/WebSocketReflectorX/releases)），或通过 `WSRX_BINARY` 指定其位置。
 
 ## 安装与配置
 

@@ -126,7 +126,7 @@ class TunnelManager:
         if exe is None:
             raise RuntimeError(
                 f"wsrx binary {self.binary!r} not found on PATH; "
-                "install it from https://github.com/XDSEC/websocket-reflector-x/releases "
+                "install it from https://github.com/XDSEC/WebSocketReflectorX/releases "
                 "or point WSRX_BINARY at the executable"
             )
         kwargs: dict[str, Any] = {}

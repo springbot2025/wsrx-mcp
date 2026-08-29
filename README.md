@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that manages [WebSocket Reflector X (wsrx)](https://github.com/XDSEC/websocket-reflector-x) tunnels.
+An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that manages [WebSocket Reflector X (wsrx)](https://github.com/XDSEC/WebSocketReflectorX) tunnels.
 
 The [ret2shell](https://github.com/ret2shell/ret2shell) CTF platform exposes dynamic challenge instances only through WebSocket traffic links such as:
 
@@ -32,7 +32,7 @@ Unlike platforms that hand out plain `host:port` pairs, you cannot `nc` or `pwnt
 ## Requirements
 
 - Python ≥ 3.10
-- The `wsrx` CLI on PATH ([releases](https://github.com/XDSEC/websocket-reflector-x/releases)), or set `WSRX_BINARY` to its location.
+- The `wsrx` CLI on PATH ([releases](https://github.com/XDSEC/WebSocketReflectorX/releases)), or set `WSRX_BINARY` to its location.
 
 ## Install & configure
 
