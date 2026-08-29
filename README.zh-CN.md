@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-一个用于管理 [WebSocket Reflector X（wsrx）](https://github.com/XDSEC/WebSocketReflectorX)隧道的 [MCP（Model Context Protocol）](https://modelcontextprotocol.io)服务器。
+一个用于管理 [WebSocket Reflector X（wsrx）](https://github.com/XDSEC/WebSocketReflectorX)隧道的 [MCP（Model Context Protocol）](https://modelcontextprotocol.io)服务。
 
 [ret2shell](https://github.com/ret2shell/ret2shell) CTF 平台的动态靶机只通过 WebSocket 流量链接暴露，形如：
 
