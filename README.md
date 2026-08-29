@@ -13,9 +13,9 @@ wss://ctf.example.com/api/traffic/<token>?port=9999
 Unlike platforms that hand out plain `host:port` pairs, you cannot `nc` or `pwntools` into these directly. **wsrx** bridges a WebSocket endpoint to a local TCP port; **wsrx-mcp** lets your MCP client (Claude Desktop, ZCode, or any other MCP host) start, inspect, and tear down those bridges as tools — no manual terminal work.
 
 ```
-┌──────────────┐   TCP    ┌─────────────┐   WSS    ┌──────────────────┐
-│ nc / pwntools├─────────►│ wsrx connect├─────────►│ platform instance│
-└──────────────┘  :1337   └─────────────┘ wss link └──────────────────┘
+┌───────────────┐   TCP    ┌──────────────┐   WSS    ┌───────────────────┐
+│ nc / pwntools ├─────────►│ wsrx connect ├─────────►│ platform instance │
+└───────────────┘  :1337   └──────────────┘ wss link └───────────────────┘
                      managed by wsrx-mcp (MCP tools)
 ```
 
