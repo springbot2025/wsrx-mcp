@@ -9,6 +9,7 @@ interpreter exit.
 
 from __future__ import annotations
 
+import atexit
 import os
 import shutil
 import signal
@@ -24,7 +25,6 @@ DEFAULT_BINARY = "wsrx"
 DEFAULT_BIND_HOST = "127.0.0.1"
 DEFAULT_STARTUP_TIMEOUT = 15.0
 DEFAULT_STARTUP_INTERVAL = 0.3
-DEFAULT_CONNECT_TIMEOUT = 1.0
 TERMINATE_TIMEOUT = 5.0
 
 VALID_SCHEMES = ("ws", "wss")
@@ -101,23 +101,26 @@ class TunnelManager:
         bind_host: str = DEFAULT_BIND_HOST,
         startup_timeout: float = DEFAULT_STARTUP_TIMEOUT,
         startup_interval: float = DEFAULT_STARTUP_INTERVAL,
-        connect_timeout: float = DEFAULT_CONNECT_TIMEOUT,
         spawner: Callable[[str, int], Any] | None = None,
         probe: Callable[[int], bool] | None = None,
         terminator: Callable[[Any], None] | None = None,
         port_allocator: Callable[[], int] | None = None,
+        autocleanup: bool = True,
     ) -> None:
         self.binary = binary
         self.bind_host = bind_host
         self.startup_timeout = startup_timeout
         self.startup_interval = startup_interval
-        self.connect_timeout = connect_timeout
         self._spawner = spawner or self._spawn_process
         self._probe = probe or self._probe_port
         self._terminator = terminator or self._terminate_process
         self._port_allocator = port_allocator or (lambda: find_free_port(self.bind_host))
         self._lock = threading.RLock()
         self._tunnels: dict[int, Tunnel] = {}
+        if autocleanup:
+            # Covers library users who build their own manager; the MCP
+            # server registers its module-level instance either way.
+            atexit.register(self.stop_all)
 
     # ---- default subprocess plumbing ----
 
@@ -197,6 +200,10 @@ class TunnelManager:
                     f"(code {tunnel.process.returncode}); is wsrx installed?"
                 )
             if self._probe(tunnel.local_port):
+                if not tunnel.alive:
+                    # The process may have bound, handed us a success probe,
+                    # and died right after; do not report a dead tunnel.
+                    continue
                 return
             time.sleep(self.startup_interval)
         self._terminator(tunnel.process)
@@ -226,6 +233,14 @@ class TunnelManager:
                 raise RuntimeError(
                     f"local port {local_port} is already used by a tunnel to "
                     f"{self._tunnels[local_port].remote}"
+                )
+            if self._probe(local_port):
+                # Something else already listens on this port. wsrx would
+                # fail to bind and exit, while our readiness probe would
+                # pass against the foreign listener - a false success.
+                raise RuntimeError(
+                    f"local port {local_port} is already in use by another "
+                    "process; pick a different port"
                 )
             process = self._spawner(remote, local_port)
             tunnel = Tunnel(remote, local_port, self.bind_host, process)
