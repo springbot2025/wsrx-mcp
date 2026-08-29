@@ -1,5 +1,7 @@
 # wsrx-mcp
 
+English | [简体中文](README.zh-CN.md)
+
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that manages [WebSocket Reflector X (wsrx)](https://github.com/XDSEC/websocket-reflector-x) tunnels.
 
 Some platforms — most notably CTF platforms like [ret2shell](https://github.com/ret2shell/ret2shell) and GZCTF — expose dynamic challenge instances only through WebSocket traffic links such as:
