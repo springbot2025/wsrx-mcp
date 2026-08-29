@@ -10,7 +10,9 @@
 wss://ctf.example.com/api/traffic/<token>?port=9999
 ```
 
-直接给出 `host:port` 的平台可以拿 nc / pwntools 直连，这种链接不行。**wsrx** 负责把 WebSocket 端点桥接成本地 TCP 端口；**wsrx-mcp** 再把建立、查看、关闭隧道的操作封装成 MCP 工具，让你的 MCP 客户端（Claude Desktop、ZCode 或任何 MCP 宿主）直接调用，全程不需要手动敲终端命令。
+直接给出 `host:port` 的平台可以拿 nc / pwntools 直连，但这种链接不行。
+
+**wsrx** 负责把 WebSocket 端点桥接成本地 TCP 端口；**wsrx-mcp** 再把建立、查看、关闭隧道的操作封装成 MCP 工具，让你的 MCP 客户端（Claude Desktop、Codex 等）直接调用，全程无需手动敲终端命令。
 
 ```
 ┌───────────────┐   TCP    ┌──────────────┐   WSS    ┌──────────────────┐
@@ -23,16 +25,16 @@ wss://ctf.example.com/api/traffic/<token>?port=9999
 
 | 工具 | 说明 |
 |---|---|
-| `wsrx_connect(remote, local_port?, wait?)` | 把本地 TCP 端口转发到 `ws://`/`wss://` 远端。同一个远端已有隧道时直接复用；未指定端口时自动挑选空闲端口；默认等本地端口真正可连接后才返回。 |
+| `wsrx_connect(remote, local_port?, wait?)` | 把本地 TCP 端口转发到 `ws://`/`wss://` 远端。对于同一个远端，已有隧道时直接复用；未指定端口时，自动挑选空闲端口；默认等本地端口真正可连接后才返回。 |
 | `wsrx_list()` | 列出所有隧道：远端 URL、本地端口、endpoint、PID、存活状态。 |
-| `wsrx_disconnect(local_port? \| remote?)` | 按本地端口或远端 URL 关闭一条隧道。 |
-| `wsrx_stop_all()` | 关闭本服务器持有的全部隧道。 |
+| `wsrx_disconnect(local_port? \| remote?)` |  关闭一条本地端口或远端 URL 隧道。 |
+| `wsrx_stop_all()` | 关闭本服务持有的全部隧道。 |
 | `wsrx_doctor()` | 检查 wsrx 可执行文件是否可用，并列出当前隧道。 |
 
 ## 环境要求
 
-- Python ≥ 3.10
-- 已安装 `wsrx` 命令行工具并加入 PATH（[releases 下载](https://github.com/XDSEC/WebSocketReflectorX/releases)），或通过 `WSRX_BINARY` 指定其位置。
+- Python 3.10+
+- 已安装 `wsrx` 命令行工具（[releases 下载](https://github.com/XDSEC/WebSocketReflectorX/releases)）并加入 PATH，或通过 `WSRX_BINARY` 指定其位置。
 
 ## 安装与配置
 
@@ -75,14 +77,14 @@ pipx install git+https://github.com/springbot2025/wsrx-mcp
 
 对 agent 说：
 
-> 连接 wss://ctf.example.com/api/traffic/abc123?port=9999，告诉我本地端口。
+> 连接 wss://ctf.example.com/api/traffic/abc123?port=9999（从ret2平台上获取的wsrx链接），告诉我本地端口。
 
-agent 调用 `wsrx_connect`，拿到 `{"endpoint": "127.0.0.1:54321", ...}`，接着就能 `nc 127.0.0.1 54321` 或者让 pwntools 连上去。同一条隧道在多次调用之间会自动复用，服务器退出时全部关闭。
+agent 调用 `wsrx_connect`，拿到 `{"endpoint": "127.0.0.1:54321", ...}`，接着就能 `nc 127.0.0.1 54321` 或者使用 pwntools 连上去。同一条隧道在多次调用之间会自动复用，在服务退出时，隧道全部关闭。
 
 ## 安全说明
 
 - 隧道默认只绑定 `127.0.0.1`。
-- 服务器只管理子进程，不保存任何凭据——流量 token 只存在于你传入的 URL 里。
+- 服务只管理子进程，不保存任何凭据——流量 token 只存在于你传入的 URL 里。
 - 仅接受 `ws://` 和 `wss://` 两种远端。
 
 ## 本地开发
@@ -92,7 +94,7 @@ pip install -e . pytest
 pytest
 ```
 
-隧道核心（`wsrx_mcp.manager`）不依赖 MCP SDK，全部依赖项可注入，便于测试。
+隧道核心（`wsrx_mcp.manager`）不依赖 MCP SDK，全部依赖项均可注入，便于测试。
 
 ## 许可证
 
