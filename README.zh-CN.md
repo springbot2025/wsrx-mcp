@@ -43,7 +43,7 @@ wss://ctf.example.com/api/traffic/<token>?port=9999
   "mcpServers": {
     "wsrx": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/OWNER/wsrx-mcp", "wsrx-mcp"]
+      "args": ["--from", "git+https://github.com/springbot2025/wsrx-mcp", "wsrx-mcp"]
     }
   }
 }
@@ -52,7 +52,7 @@ wss://ctf.example.com/api/traffic/<token>?port=9999
 或者先安装一次，再把 `wsrx-mcp` 命令配到 MCP 客户端里：
 
 ```bash
-pipx install git+https://github.com/OWNER/wsrx-mcp
+pipx install git+https://github.com/springbot2025/wsrx-mcp
 ```
 
 ```json

@@ -43,7 +43,7 @@ Run directly from GitHub with `uvx` (recommended — no clone needed):
   "mcpServers": {
     "wsrx": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/OWNER/wsrx-mcp", "wsrx-mcp"]
+      "args": ["--from", "git+https://github.com/springbot2025/wsrx-mcp", "wsrx-mcp"]
     }
   }
 }
@@ -52,7 +52,7 @@ Run directly from GitHub with `uvx` (recommended — no clone needed):
 Or install once, then point your MCP client at the `wsrx-mcp` command:
 
 ```bash
-pipx install git+https://github.com/OWNER/wsrx-mcp
+pipx install git+https://github.com/springbot2025/wsrx-mcp
 ```
 
 ```json
