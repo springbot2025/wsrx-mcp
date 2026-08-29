@@ -27,7 +27,7 @@ wss://ctf.example.com/api/traffic/<token>?port=9999
 |---|---|
 | `wsrx_connect(remote, local_port?, wait?)` | 把本地 TCP 端口转发到 `ws://`/`wss://` 远端。对于同一个远端，已有隧道时直接复用；未指定端口时，自动挑选空闲端口；默认等本地端口真正可连接后才返回。 |
 | `wsrx_list()` | 列出所有隧道：远端 URL、本地端口、endpoint、PID、存活状态。 |
-| `wsrx_disconnect(local_port? \| remote?)` |  关闭一条本地端口或远端 URL 隧道。 |
+| `wsrx_disconnect(local_port? \| remote?)` |  按本地端口或远端 URL 关闭一条隧道。 |
 | `wsrx_stop_all()` | 关闭本服务持有的全部隧道。 |
 | `wsrx_doctor()` | 检查 wsrx 可执行文件是否可用，并列出当前隧道。 |
 
