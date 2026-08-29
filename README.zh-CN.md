@@ -4,13 +4,13 @@
 
 一个用于管理 [WebSocket Reflector X（wsrx）](https://github.com/XDSEC/websocket-reflector-x)隧道的 [MCP（Model Context Protocol）](https://modelcontextprotocol.io)服务器。
 
-一些平台——最典型的是 [ret2shell](https://github.com/ret2shell/ret2shell)、GZCTF 等 CTF 平台——动态靶机只通过 WebSocket 流量链接暴露，形如：
+[ret2shell](https://github.com/ret2shell/ret2shell) CTF 平台的动态靶机只通过 WebSocket 流量链接暴露，形如：
 
 ```
 wss://ctf.example.com/api/traffic/<token>?port=9999
 ```
 
-这种链接没法直接用 nc / pwntools 连。**wsrx** 负责把 WebSocket 端点桥接成本地 TCP 端口；**wsrx-mcp** 则把"开桥、查桥、拆桥"封装成 MCP 工具，让你的 MCP 客户端（Claude Desktop、ZCode 或任何 MCP 宿主）直接调用，不再需要手动敲终端命令。
+不像直接给出 `host:port` 的平台，这种链接没法直接用 nc / pwntools 连。**wsrx** 负责把 WebSocket 端点桥接成本地 TCP 端口；**wsrx-mcp** 则把"开桥、查桥、拆桥"封装成 MCP 工具，让你的 MCP 客户端（Claude Desktop、ZCode 或任何 MCP 宿主）直接调用，不再需要手动敲终端命令。
 
 ```
 ┌──────────────┐   TCP    ┌─────────────┐   WSS    ┌──────────────────┐

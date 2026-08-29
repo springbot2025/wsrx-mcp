@@ -4,13 +4,13 @@ English | [简体中文](README.zh-CN.md)
 
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that manages [WebSocket Reflector X (wsrx)](https://github.com/XDSEC/websocket-reflector-x) tunnels.
 
-Some platforms — most notably CTF platforms like [ret2shell](https://github.com/ret2shell/ret2shell) and GZCTF — expose dynamic challenge instances only through WebSocket traffic links such as:
+The [ret2shell](https://github.com/ret2shell/ret2shell) CTF platform exposes dynamic challenge instances only through WebSocket traffic links such as:
 
 ```
 wss://ctf.example.com/api/traffic/<token>?port=9999
 ```
 
-You cannot `nc` or `pwntools` into those directly. **wsrx** bridges a WebSocket endpoint to a local TCP port; **wsrx-mcp** lets your MCP client (Claude Desktop, ZCode, or any other MCP host) start, inspect, and tear down those bridges as tools — no manual terminal work.
+Unlike platforms that hand out plain `host:port` pairs, you cannot `nc` or `pwntools` into these directly. **wsrx** bridges a WebSocket endpoint to a local TCP port; **wsrx-mcp** lets your MCP client (Claude Desktop, ZCode, or any other MCP host) start, inspect, and tear down those bridges as tools — no manual terminal work.
 
 ```
 ┌────────────┐   TCP    ┌─────────────┐   WSS    ┌──────────────────┐
